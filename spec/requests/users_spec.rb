@@ -11,5 +11,10 @@ RSpec.describe "Users", type: :request do
         "token" => AuthenticationTokenService.call(User.last.id)
       })
     end
+    it "username is already used" do
+      post "/api/v1/register", params: { user: { username: "user1", password: "password" } }
+      post "/api/v1/register", params: { user: { username: "user1", password: "password" } }
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 end
