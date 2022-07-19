@@ -12,6 +12,7 @@ module Api
             # POST /book
             def create
                 @book = Book.create(book_params)
+                # binding.pry
                 if @book.save
                     render json: BookRepresenter.new(@book).as_json, status: :created
                 else
@@ -38,7 +39,7 @@ module Api
 
             private
             def book_params
-                params.permit(:title, :author, :category_id)
+                params.permit(:title, :author, :category_id, :user_id)
             end
             def set_book
                 @book = Book.find(params[:id])

@@ -40,11 +40,13 @@ RSpec.describe "Books", type: :request do
 
   describe "POST /books/" do
     let!(:history) { create(:category) }
+    let!(:owner) { create(:user) }
     let(:valid_attributes) do
       {
         title: "Whisper of Time",
         author: "Dr. Krishna Saksena",
-        category_id: history.id
+        category_id: history.id,
+        user_id: owner.id
       }
     end
     context "When request attributes are valid" do
