@@ -1,6 +1,7 @@
 module Api
     module V1
         class CategoriesController < ApplicationController
+            before_action :authenticate_request!
             before_action :set_category, only: :destroy
             # GET /categories
             def index

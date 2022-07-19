@@ -4,9 +4,12 @@ RSpec.describe "Categories", type: :request do
   # inicializando os dados
   let!(:categories) { create_list(:category, 5) }
   let!(:category_id) { categories.first.id }
+  let!(:user) { FactoryBot.create(:user, username: "magno", password: "password") }
 
   describe "GET /categories" do
-    before { get "/api/v1/categories" }
+    before { get "/api/v1/categories", headers: {
+      "Authorization" => AuthenticationTokenService.call(user.id)
+    } }
     it "returns categories" do
       expect(json).not_to be_empty
       expect(json.size).to eq(5)
@@ -19,7 +22,9 @@ RSpec.describe "Categories", type: :request do
   describe "POST /categories" do
     let(:valid_name) { { name: "Horror" } }
     context "when the request is valid" do
-      before { post "/api/v1/categories", params: valid_name }
+      before { post "/api/v1/categories", params: valid_name, headers: {
+        "Authorization" => AuthenticationTokenService.call(user.id)
+      } }
       it "creates a category" do
         expect(json["name"]).to eq("Horror")
       end
@@ -28,7 +33,9 @@ RSpec.describe "Categories", type: :request do
       end
     end
     context "when the request is invalid" do
-      before { post "/api/v1/categories", params: { name: "" } }
+      before { post "/api/v1/categories", params: { name: "" }, headers: {
+        "Authorization" => AuthenticationTokenService.call(user.id)
+      } }
       it "return a status code 422" do
         expect(response).to have_http_status(422)
       end
@@ -39,7 +46,9 @@ RSpec.describe "Categories", type: :request do
   end
 
   describe "DELETE /categories/:id" do
-    before { delete "/api/v1/categories/#{category_id}" }
+    before { delete "/api/v1/categories/#{category_id}", headers: {
+      "Authorization" => AuthenticationTokenService.call(user.id)
+    } }
     it "returns status code 204" do
       expect(response).to have_http_status(204)
     end
