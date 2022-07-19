@@ -4,6 +4,7 @@ RSpec.describe Book, type: :model do
   describe "associations" do
     # Teste de associação com as categorias
     it { should belong_to(:category) }
+    it { should belong_to(:user) }
   end
 
   describe "validations" do
